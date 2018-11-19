@@ -8,7 +8,9 @@ from django.utils.decorators import method_decorator
 
 from .forms import HeritageSiteForm
 from .models import HeritageSite, CountryArea, HeritageSiteJurisdiction
+from .filters import HeritageSiteFilter
 from django.db.models import F
+from django_filters.views import FilterView
 
 # Create your views here.
 def index(request):
@@ -31,6 +33,10 @@ class SiteListView(generic.ListView):
     def get_queryset(self):
         heritage_sites = HeritageSite.objects.all().select_related('heritage_site_category').order_by('site_name')
         return heritage_sites
+
+class SiteFilterView(FilterView):
+    filterset_class = HeritageSiteFilter
+    template_name = 'heritagesites/site_filter.html'
 
 class SiteDetailView(generic.DetailView):
     model = HeritageSite
